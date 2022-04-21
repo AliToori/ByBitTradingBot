@@ -1,6 +1,5 @@
 import logging.config
 import os
-from pathlib import Path
 
 import pandas as pd
 from django.shortcuts import render
@@ -49,7 +48,7 @@ logging.config.dictConfig({
 })
 LOGGER = logging.getLogger()
 
-PROJECT_ROOT = Path(os.path.abspath(os.path.dirname(__file__)))
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 api_key = os.getenv("BYBIT_API_KEY")
 api_secret = os.getenv("BYBIT_API_SECRET")
 symbol = os.getenv("SYMBOL")
@@ -64,7 +63,7 @@ def handle_position(message):
     df.columns = ['Time', 'Symbol', 'Price']
     df["Price"] = df["Price"].astype(float)
     df["Time"] = pd.to_datetime(df["Time"], unit='ms')
-    file_path = str(PROJECT_ROOT / f'{symbol}.csv')
+    file_path = str(PROJECT_ROOT + f'/{symbol}.csv')
     df.to_csv(file_path, index=False)
 
 
