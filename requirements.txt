@@ -3,3 +3,7 @@ gunicorn
 django-heroku
 requests
 pybit
+colorlog
+dotenv
+pathlib
+pandas
