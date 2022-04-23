@@ -57,7 +57,7 @@ api_key = os.getenv("BYBIT_API_KEY")
 api_secret = os.getenv("BYBIT_API_SECRET")
 symbol = os.getenv("SYMBOL")
 client = usdt_perpetual.HTTP(endpoint='https://api-testnet.bybit.com', api_key=api_key, api_secret=api_secret)
-ws = usdt_perpetual.WebSocket(test=True, api_key=api_key, api_secret=api_secret)
+ws = usdt_perpetual.WebSocket(test=False, api_key=api_key, api_secret=api_secret)
 
 buy_price = 93.40
 take_profit = 95
