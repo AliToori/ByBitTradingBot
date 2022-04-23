@@ -3,17 +3,71 @@
 
 {% block content %}
 
-<div class="jumbotron text-center">
-  <div class="container">
-    <h3>ByBit USDT Perpetual Trading</h3>
-    <p>Symbol: {{ order_data.symbol }}, Price: {{ order_data.price }}</p>
-    <a type="button" class="btn btn-lg btn-default" href="https://devcenter.heroku.com/articles/getting-started-with-python"><span class="glyphicon glyphicon-flash"></span> Account Balance</a>
-    <a type="button" class="btn btn-lg btn-primary" href="https://github.com/heroku/python-getting-started"><span class="glyphicon glyphicon-download"></span> View Logs</a>
-  </div>
-</div>
-<div class="container">
-  <div class="alert alert-info text-center" role="alert">
-    To deploy your own copy, and learn the fundamentals of the Heroku platform, head over to the <a href="https://devcenter.heroku.com/articles/getting-started-with-python" class="alert-link">Getting Started with Python on Heroku</a> tutorial.
-  </div>
-</div>
+    <div class="jumbotron text-center">
+        <div class="container">
+            <h3>ByBit USDT Perpetual Trading</h3>
+            <a type="button" class="btn btn-lg btn-default"
+               href="https://devcenter.heroku.com/articles/getting-started-with-python"><span
+                    class="glyphicon glyphicon-flash"></span> Account Balance</a>
+            <a type="button" class="btn btn-lg btn-primary"
+               href="https://github.com/heroku/python-getting-started"><span
+                    class="glyphicon glyphicon-download"></span> View Logs</a>
+        </div>
+        <div class="container">
+            <form action="" method="POST" role="form" style="margin: auto; width: 50%; padding: 10px;">
+                {% csrf_token %}
+                <table class="aui aui-table-list bg-white" id="table">
+                    <thead>
+                    <tr>
+                        <th class="text-dark"> Buy Price</th>
+                        <th class="text-dark"> Take Profit</th>
+                        <th class="text-dark"> Stop Loss</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" name="buyprice" id="buyprice" value=""
+                                   required>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="takeprofit" id="takeprofit"
+                                   value="" required>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="stoploss" id="stoploss" value=""
+                                   required>
+                        </td>
+                    </tr>
+                </table>
+                <input type="submit" name="btn" value="Submit" id="btn" class="ui-button">
+            </form>
+        </div>
+        <div class="container">
+            {% if order %}
+                <table class="aui aui-table-list bg-white" id="table" style="margin: auto; width: 50%; padding: 10px;">
+                    <thead>
+                    <tr>
+                        {% for key, value in order.items %}
+                            <th class="text-dark"> {{ key }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        {% for key, value in order.items %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container">
+        <div class="alert alert-info text-center" role="alert">
+            To deploy your own copy, and learn the fundamentals of the Heroku platform, head over to the <a
+                href="https://devcenter.heroku.com/articles/getting-started-with-python" class="alert-link">Getting
+            Started with Python on Heroku</a> tutorial.
+        </div>
+    </div>
 {% endblock %}

@@ -1,12 +1,16 @@
+import json
 import logging.config
 import os
+from time import sleep
 
 import pandas as pd
 from django.shortcuts import render
 from pybit import usdt_perpetual
-
+from dotenv import load_dotenv
 from .models import Greeting
+from threading import Thread
 
+load_dotenv()
 
 logging.config.dictConfig({
     "version": 1,
@@ -52,19 +56,83 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 api_key = os.getenv("BYBIT_API_KEY")
 api_secret = os.getenv("BYBIT_API_SECRET")
 symbol = os.getenv("SYMBOL")
-session = usdt_perpetual.HTTP(endpoint='https://api-testnet.bybit.com', api_key=api_key, api_secret=api_secret)
-ws = usdt_perpetual.WebSocket(test=False, api_key=api_key, api_secret=api_secret)
+client = usdt_perpetual.HTTP(endpoint='https://api-testnet.bybit.com', api_key=api_key, api_secret=api_secret)
+ws = usdt_perpetual.WebSocket(test=True, api_key=api_key, api_secret=api_secret)
+
+buy_price = 93.40
+take_profit = 95
+stop_loss = 90
+position = False
+tp_order = None
+
+
+def handle_execution(message):
+    order = json.loads(json.dumps(message, indent=4))
+    print(f'Execution Status: {order["data"][0]["order_status"]}')
+    if order["data"][0]["order_status"] == "Filled":
+        print(f'Placing buy limit TP/SL order')
+        # account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+        # quantity = round(account_balance / buy_price)
+        tp_order = client.place_active_order(
+            symbol=symbol,
+            side="Buy",
+            order_type="Market",
+            qty=1,
+            # price=buy_price,
+            take_profit=take_profit,
+            stop_loss=stop_loss,
+            time_in_force="GoodTillCancel",
+            reduce_only=False,
+            close_on_trigger=False
+        )
+        tp_order = json.loads(json.dumps(tp_order, indent=4))['result']
+        print(f"TP/SL limit order: {tp_order}")
 
 
 # Check on your order and position through WebSocket.
-def handle_position(message):
-    df = pd.DataFrame([message])
-    df = df.loc[:, ['E', 's', 'c']]
-    df.columns = ['Time', 'Symbol', 'Price']
-    df["Price"] = df["Price"].astype(float)
-    df["Time"] = pd.to_datetime(df["Time"], unit='ms')
-    file_path = str(PROJECT_ROOT + f'/{symbol}.csv')
-    df.to_csv(file_path, index=False)
+def handle_order(message):
+    order = json.loads(json.dumps(message, indent=4))
+    print(f'Order Data: {order}')
+    print(f'Order Status: {order["data"][0]["order_status"]}')
+    if order["data"][0]["order_status"] == "Filled":
+        print(f'Placing buy limit TP/SL order')
+        # account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+        # quantity = round(account_balance / buy_price)
+        tp_order = client.place_active_order(
+            symbol=symbol,
+            side="Buy",
+            order_type="Market",
+            qty=1,
+            price=buy_price,
+            take_profit=take_profit,
+            stop_loss=stop_loss,
+            time_in_force="GoodTillCancel",
+            reduce_only=False,
+            close_on_trigger=False
+        )
+        tp_order = json.loads(json.dumps(tp_order, indent=4))['result']
+        print(f"TP/SL limit order: {tp_order}")
+
+
+def handle_trade(message):
+    trade_data = json.loads(json.dumps(message, indent=4))
+    trade_data = trade_data["data"]
+    print(f'Trade Data: {trade_data}')
+
+
+# Subscribe to the execution topics
+def get_connected():
+    # Subscribe to the execution topics
+    ws.trade_stream(callback=handle_trade, symbol=symbol)
+    # ws.order_stream(handle_order)
+    ws.execution_stream(handle_execution)
+    # ws.position_stream(handle_position)
+    while True:
+        print(f'Websocket connection status: {ws.test}')
+        sleep(1)
+
+
+Thread(target=get_connected).start()
 
 
 # Create your views here.
@@ -73,41 +141,33 @@ def index(request):
 
 
 def trades(request):
-
-    # {{plot_7}} {{plot_8}} {{plot_4}}
-    # buyprice takeprofit stoploss
+    # It needs to be able to receive a webhook post from Trading View, then it would place a limit order on Bybit.
+    # After that it would subscribe to the executions topic, wait for the order to be filled, and when it's filled,
+    # it would place Take Profit Limit Orders.
     if request.method == 'POST':
-        account_balance = session.get_wallet_balance()
-        LOGGER.info(f"Account Balance: {account_balance}")
-        order_data = {
-            "Symbol": request.POST["symbol"],
-            "BuyPrice": request.POST["buyprice"],
-            "TakeProfit": request.POST["takeprofit"],
-            "StopLoss": request.POST["stoploss"]
-        }
-        quantity = round(account_balance / order_data["BuyPrice"])
-        buy_order = session.place_conditional_order(
+        account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+        print(f"Account Balance: {account_balance}")
+        buy_price = request.POST["buyprice"]
+        take_profit = request.POST["takeprofit"]
+        stop_loss = request.POST["stoploss"]
+        print(f'Request Post Data: {buy_price}, {take_profit}, {stop_loss}')
+        # quantity = round(account_balance / buy_price)
+        quantity = 1
+        order = client.place_active_order(
             symbol=symbol,
-            order_type="Limit",
             side="Buy",
+            order_type="Limit",
             qty=quantity,
-            price=order_data["BuyPrice"],
-            base_price=order_data["BuyPrice"],
-            stop_px=order_data["BuyPrice"],
+            price=buy_price,
             time_in_force="GoodTillCancel",
-            order_link_id="cus_order_id_1",
             reduce_only=False,
-            close_on_trigger=False,
+            close_on_trigger=False
         )
-        LOGGER.info(f"Buy Order has been placed: {buy_order}")
-        # Subscribe to the execution topic
-        ws.position_stream(handle_position)
-        # return render(request, 'trades.html', {"order_data": order_data})
-    order_data = {
-        "symbol": "LUNAUSDT",
-        "price": 5
-    }
-    return render(request, 'trades.html', {"order_data": order_data})
+        print(f"Buy Market order has been placed: {order}")
+        order = json.loads(json.dumps(order, indent=4))["result"]
+        position = True
+        return render(request, 'trades.html', {"order": order})
+    return render(request, 'trades.html')
 
 
 def db(request):
