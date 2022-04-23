@@ -60,6 +60,7 @@ client = usdt_perpetual.HTTP(endpoint='https://api-testnet.bybit.com', api_key=a
 ws = usdt_perpetual.WebSocket(test=False, api_key=api_key, api_secret=api_secret)
 
 buy_price = 93.40
+quantity = 1
 take_profit = 95
 stop_loss = 90
 position = False
@@ -71,13 +72,11 @@ def handle_execution(message):
     print(f'Execution Status: {order["data"][0]["order_status"]}')
     if order["data"][0]["order_status"] == "Filled":
         print(f'Placing buy limit TP/SL order')
-        # account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
-        # quantity = round(account_balance / buy_price)
         tp_order = client.place_active_order(
             symbol=symbol,
             side="Buy",
             order_type="Market",
-            qty=1,
+            qty=quantity,
             # price=buy_price,
             take_profit=take_profit,
             stop_loss=stop_loss,
@@ -96,13 +95,11 @@ def handle_order(message):
     print(f'Order Status: {order["data"][0]["order_status"]}')
     if order["data"][0]["order_status"] == "Filled":
         print(f'Placing buy limit TP/SL order')
-        # account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
-        # quantity = round(account_balance / buy_price)
         tp_order = client.place_active_order(
             symbol=symbol,
             side="Buy",
             order_type="Market",
-            qty=1,
+            qty=quantity,
             price=buy_price,
             take_profit=take_profit,
             stop_loss=stop_loss,
@@ -151,8 +148,7 @@ def trades(request):
         take_profit = request.POST["takeprofit"]
         stop_loss = request.POST["stoploss"]
         print(f'Request Post Data: {buy_price}, {take_profit}, {stop_loss}')
-        # quantity = round(account_balance / buy_price)
-        quantity = 1
+        quantity = round(account_balance / buy_price)
         order = client.place_active_order(
             symbol=symbol,
             side="Buy",
@@ -165,7 +161,6 @@ def trades(request):
         )
         print(f"Buy Market order has been placed: {order}")
         order = json.loads(json.dumps(order, indent=4))["result"]
-        position = True
         return render(request, 'trades.html', {"order": order})
     return render(request, 'trades.html')
 
