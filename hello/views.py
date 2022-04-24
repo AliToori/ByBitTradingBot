@@ -6,11 +6,11 @@ from time import sleep
 import pandas as pd
 from django.shortcuts import render
 from pybit import usdt_perpetual
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 from .models import Greeting
 from threading import Thread
 
-# load_dotenv()
+load_dotenv()
 
 logging.config.dictConfig({
     "version": 1,
@@ -120,15 +120,16 @@ def handle_trade(message):
 # Subscribe to the execution topics
 def get_connected():
     # Subscribe to the execution topics
-    ws.trade_stream(callback=handle_trade, symbol=symbol)
+    # ws.trade_stream(callback=handle_trade, symbol=symbol)
     # ws.order_stream(handle_order)
     ws.execution_stream(handle_execution)
     # ws.position_stream(handle_position)
+    print(f'Websocket connected')
     while True:
-        print(f'Websocket connection status: {ws.test}')
         sleep(1)
 
 
+# Start WebSocket in a separate thread
 Thread(target=get_connected).start()
 
 
@@ -144,11 +145,12 @@ def trades(request):
     if request.method == 'POST':
         account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
         print(f"Account Balance: {account_balance}")
-        buy_price = request.POST["buyprice"]
-        take_profit = request.POST["takeprofit"]
-        stop_loss = request.POST["stoploss"]
-        print(f'Request Post Data: {buy_price}, {take_profit}, {stop_loss}')
-        quantity = round(account_balance / buy_price)
+        print(f'Request Post Data: {request.POST["buyprice"]}, {request.POST["takeprofit"]}, {request.POST["stoploss"]}')
+        buy_price = float(request.POST["buyprice"])
+        take_profit = float(request.POST["takeprofit"])
+        stop_loss = float(request.POST["stoploss"])
+        # quantity = round(account_balance / buy_price)
+        quantity = 1
         order = client.place_active_order(
             symbol=symbol,
             side="Buy",
@@ -159,8 +161,12 @@ def trades(request):
             reduce_only=False,
             close_on_trigger=False
         )
-        print(f"Buy Market order has been placed: {order}")
         order = json.loads(json.dumps(order, indent=4))["result"]
+        print(f"Buy Market order has been placed: {order}")
+        order = {"order_id": order["order_id"], "symbol": order["symbol"], "side": order["side"],
+                 "order_type": order["order_type"], "price": order["price"],
+                 "qty": order["qty"], "order_status": order["order_status"], "created_time": order["created_time"]
+                 }
         return render(request, 'trades.html', {"order": order})
     return render(request, 'trades.html')
 
