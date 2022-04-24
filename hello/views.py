@@ -6,12 +6,12 @@ from time import sleep
 
 import pandas as pd
 from django.shortcuts import render
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from pybit import usdt_perpetual
 
 from .models import Greeting
 
-load_dotenv()
+# load_dotenv()
 
 logging.config.dictConfig({
     "version": 1,
@@ -70,9 +70,9 @@ tp_order = None
 
 def handle_execution(message):
     order = json.loads(json.dumps(message, indent=4))
-    print(f'Execution Status: {order["data"][0]["order_status"]}')
+    LOGGER.info(f'Execution Status: {order["data"][0]["order_status"]}')
     if order["data"][0]["order_status"] == "Filled":
-        print(f'Placing buy limit TP/SL order')
+        LOGGER.info(f'Placing buy limit TP/SL order')
         tp_order = client.place_active_order(
             symbol=symbol,
             side="Buy",
@@ -86,16 +86,16 @@ def handle_execution(message):
             close_on_trigger=False
         )
         tp_order = json.loads(json.dumps(tp_order, indent=4))['result']
-        print(f"TP/SL limit order: {tp_order}")
+        LOGGER.info(f"TP/SL limit order: {tp_order}")
 
 
 # Check on your order and position through WebSocket.
 def handle_order(message):
     order = json.loads(json.dumps(message, indent=4))
-    print(f'Order Data: {order}')
-    print(f'Order Status: {order["data"][0]["order_status"]}')
+    LOGGER.info(f'Order Data: {order}')
+    LOGGER.info(f'Order Status: {order["data"][0]["order_status"]}')
     if order["data"][0]["order_status"] == "Filled":
-        print(f'Placing buy limit TP/SL order')
+        LOGGER.info(f'Placing buy limit TP/SL order')
         tp_order = client.place_active_order(
             symbol=symbol,
             side="Buy",
@@ -109,13 +109,13 @@ def handle_order(message):
             close_on_trigger=False
         )
         tp_order = json.loads(json.dumps(tp_order, indent=4))['result']
-        print(f"TP/SL limit order: {tp_order}")
+        LOGGER.info(f"TP/SL limit order: {tp_order}")
 
 
 def handle_trade(message):
     trade_data = json.loads(json.dumps(message, indent=4))
     trade_data = trade_data["data"]
-    print(f'Trade Data: {trade_data}')
+    LOGGER.info(f'Trade Data: {trade_data}')
 
 
 # Subscribe to the execution topics
@@ -125,7 +125,7 @@ def get_connected():
     # ws.order_stream(handle_order)
     ws.execution_stream(handle_execution)
     # ws.position_stream(handle_position)
-    print(f'Websocket connected')
+    LOGGER.info(f'Websocket connected')
     while True:
         sleep(1)
 
