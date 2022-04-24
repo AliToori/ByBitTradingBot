@@ -1,16 +1,17 @@
 import json
 import logging.config
 import os
+from threading import Thread
 from time import sleep
 
 import pandas as pd
 from django.shortcuts import render
+from dotenv import load_dotenv
 from pybit import usdt_perpetual
-# from dotenv import load_dotenv
-from .models import Greeting
-from threading import Thread
 
-# load_dotenv()
+from .models import Greeting
+
+load_dotenv()
 
 logging.config.dictConfig({
     "version": 1,
@@ -135,17 +136,28 @@ Thread(target=get_connected).start()
 
 # Create your views here.
 def index(request):
-    return render(request, "index.html")
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+    if request.method == 'POST' and "trades" in request.POST:
+        user_trades = client.user_trade_records(symbol="LUNAUSDT")
+        user_trades = json.loads(json.dumps(user_trades, indent=4))["result"]["data"]
+        user_trades = [
+            {"Order No": i, "Order ID": trade["order_id"], "Symbol": trade["symbol"], "Side": trade["side"],
+             "Order Type": trade["order_type"], "Price": trade["price"], "Quantity": trade["order_qty"],
+             "Trade Time": pd.to_datetime(trade["trade_time_ms"], unit="ms")
+             } for i, trade in enumerate(user_trades)]
+        # print(f'User trades LUNAUSDT: {user_trades}')
+        return render(request, "index.html", context={"account_balance": account_balance, "trades": user_trades})
+    return render(request, "index.html", context={"account_balance": account_balance})
 
 
 def trades(request):
     # It needs to be able to receive a webhook post from Trading View, then it would place a limit order on Bybit.
     # After that it would subscribe to the executions topic, wait for the order to be filled, and when it's filled,
     # it would place Take Profit Limit Orders.
-    if request.method == 'POST':
-        account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+    if request.method == 'POST' and "buyprice" in request.POST:
         print(f"Account Balance: {account_balance}")
-        print(f'Request Post Data: {request.POST["buyprice"]}, {request.POST["takeprofit"]}, {request.POST["stoploss"]}')
+        # print(f'Order Post Data: {request.POST["buyprice"]}, {request.POST["takeprofit"]}, {request.POST["stoploss"]}')
         buy_price = float(request.POST["buyprice"])
         take_profit = float(request.POST["takeprofit"])
         stop_loss = float(request.POST["stoploss"])
@@ -162,13 +174,23 @@ def trades(request):
             close_on_trigger=False
         )
         order = json.loads(json.dumps(order, indent=4))["result"]
-        print(f"Buy Market order has been placed: {order}")
         order = {"order_id": order["order_id"], "symbol": order["symbol"], "side": order["side"],
                  "order_type": order["order_type"], "price": order["price"],
                  "qty": order["qty"], "order_status": order["order_status"], "created_time": order["created_time"]
                  }
-        return render(request, 'trades.html', {"order": order})
-    return render(request, 'trades.html')
+        print(f"Buy Market order has been placed: {order}")
+        return render(request, 'trades.html', {"account_balance": account_balance, "order": order})
+    elif request.method == 'POST' and "trades" in request.POST:
+        user_trades = client.user_trade_records(symbol="LUNAUSDT")
+        user_trades = json.loads(json.dumps(user_trades, indent=4))["result"]["data"]
+        user_trades = [
+            {"Order No": i, "Order ID": trade["order_id"], "Symbol": trade["symbol"], "Side": trade["side"],
+             "Order Type": trade["order_type"], "Price": trade["price"], "Quantity": trade["order_qty"],
+             "Trade Time": pd.to_datetime(trade["trade_time_ms"], unit="ms")
+             } for i, trade in enumerate(user_trades)]
+        # print(f'User trades LUNAUSDT: {user_trades}')
+        return render(request, "trades.html", context={"account_balance": account_balance, "trades": user_trades})
+    return render(request, 'trades.html', context={"account_balance": account_balance})
 
 
 def db(request):
