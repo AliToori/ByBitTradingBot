@@ -6,11 +6,11 @@ from time import sleep
 import pandas as pd
 from django.shortcuts import render
 from pybit import usdt_perpetual
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from .models import Greeting
 from threading import Thread
 
-load_dotenv()
+# load_dotenv()
 
 logging.config.dictConfig({
     "version": 1,
