@@ -199,7 +199,7 @@ def trades(request):
 
 
 def test(request):
-    print(f'REQUEST METHOD: {request.method}, REQUEST DATA: {request.POST}')
+    print(f'REQUEST METHOD: {request.method}, REQUEST DATA: {request.body}')
     return render(request, "test.html")
 
 
