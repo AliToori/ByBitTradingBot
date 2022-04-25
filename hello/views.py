@@ -156,7 +156,7 @@ def trades(request):
     # After that it would subscribe to the executions topic, wait for the order to be filled, and when it's filled,
     # it would place Take Profit Limit Orders.
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
-    print(f'POST DATA: {request.POST}')
+    print(f'POST DATA: {request.body}')
     if request.method == 'POST' and "buyprice" in request.POST:
         client.cancel_all_active_orders(symbol=symbol)
         client.cancel_all_conditional_orders(symbol=symbol)
@@ -198,6 +198,7 @@ def trades(request):
     return render(request, 'trades.html', context={"account_balance": account_balance})
 
 
+@csrf_exempt
 def test(request):
     print(f'REQUEST METHOD: {request.method}, REQUEST DATA: {request.body}')
     return render(request, "test.html")
