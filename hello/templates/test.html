@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <div class="jumbotron">
+        <div class="container text-center">
+            <h1>ByBit Trading Bot</h1>
+            <h1>THIS IS A TEST PAGE</h1>
+            <p>ByBit USDT perpetual trading bot based on TradingView alerts</p>
+            <form action="" method="POST" role="form" style="margin: auto; width: 100%">
+                {% csrf_token %}
+                <button type="button" class="btn btn-lg btn-default"> Account Balance: <span
+                        class="glyphicon glyphicon-usd"></span>{{ account_balance }}</button>
+                <button type="submit" name="trades" class="btn btn-lg btn-primary"><span
+                        class="glyphicon glyphicon-th-list"></span> Trades
+                </button>
+            </form>
+            {#            <button type="button" class="btn btn-lg btn-default"> Account Balance: <span class="glyphicon glyphicon-usd"></span>{{ account_balance }}</button>#}
+        </div>
+        <div class="container text-center" id="formorder">
+            <p>Place a limit order <span class="glyphicon glyphicon-hand-down"></span></p>
+            <form action="" method="POST" role="form" style="margin: auto; width: 100%">
+                {% csrf_token %}
+                <table class="table table-dark" id="table">
+                    <thead>
+                    <tr>
+                        <th class="text-dark"> Buy Price</th>
+                        <th class="text-dark"> Take Profit</th>
+                        <th class="text-dark"> Stop Loss</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" name="buyprice" id="buyprice" value=""
+                                   required>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="takeprofit" id="takeprofit"
+                                   value="" required>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="stoploss" id="stoploss" value=""
+                                   required>
+                        </td>
+                    </tr>
+                </table>
+                <button type="submit" class="btn btn-lg btn-default"><span class="glyphicon glyphicon-bitcoin"></span>
+                    SUBMIT
+                </button>
+            </form>
+        </div>
+        <div class="container text-center" id="tableorder">
+            {% if order %}
+                <p>Limit order has been placed</p>
+                <table class="table table-dark table-striped" id="table" style="margin: auto; width: 100%">
+                    <thead>
+                    <tr>
+                        {% for key, value in order.items %}
+                            <th class="text-dark"> {{ key }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        {% for key, value in order.items %}
+                            <td style="color: white">{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            {% endif %}
+        </div>
+        <div class="container" id="tabletrades">
+            {% if trades %}
+                <h3 class="text-center">User Trades LUNAUSDT</h3>
+                <table class="table table-hover table-dark" id="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        {% for key, value in trades.0.items %}
+                            <th class="text-dark"> {{ key }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for trade in trades %}
+                        <tr>
+                            {% for key, value in trade.items %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

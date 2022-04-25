@@ -198,6 +198,12 @@ def trades(request):
     return render(request, 'trades.html', context={"account_balance": account_balance})
 
 
+@csrf_exempt
+def trades(request):
+    print(f'REQUEST METHOD: {request.method}, REQUEST DATA: {request.POST}')
+    return render(request, "trades.html")
+
+
 def db(request):
     greeting = Greeting()
     greeting.save()
