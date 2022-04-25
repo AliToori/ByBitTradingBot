@@ -157,7 +157,7 @@ def trades(request):
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
     if request.method == 'POST' and "buyprice" in request.POST:
         print(f"Account Balance: {account_balance}")
-        # print(f'Order Post Data: {request.POST["buyprice"]}, {request.POST["takeprofit"]}, {request.POST["stoploss"]}')
+        print(f'Order Post Data: {request.POST["buyprice"]}, {request.POST["takeprofit"]}, {request.POST["stoploss"]}')
         buy_price = float(request.POST["buyprice"])
         take_profit = float(request.POST["takeprofit"])
         stop_loss = float(request.POST["stoploss"])
