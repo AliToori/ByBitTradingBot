@@ -51,7 +51,7 @@ logging.config.dictConfig({
              "handlers": ["console", "file"]
              }
 })
-LOGGER = logging.getLogger()
+# LOGGER = logging.getLogger()
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 api_key = os.getenv("BYBIT_API_KEY")
@@ -70,9 +70,9 @@ tp_order = None
 
 def handle_execution(message):
     order = json.loads(json.dumps(message, indent=4))
-    LOGGER.info(f'Execution Status: {order["data"][0]["order_status"]}')
+    print(f'Execution Status: {order["data"][0]["order_status"]}')
     if order["data"][0]["order_status"] == "Filled":
-        LOGGER.info(f'Placing buy limit TP/SL order')
+        print(f'Placing buy limit TP/SL order')
         tp_order = client.place_active_order(
             symbol=symbol,
             side="Buy",
@@ -86,16 +86,16 @@ def handle_execution(message):
             close_on_trigger=False
         )
         tp_order = json.loads(json.dumps(tp_order, indent=4))['result']
-        LOGGER.info(f"TP/SL limit order: {tp_order}")
+        print(f"TP/SL limit order: {tp_order}")
 
 
 # Check on your order and position through WebSocket.
 def handle_order(message):
     order = json.loads(json.dumps(message, indent=4))
-    LOGGER.info(f'Order Data: {order}')
-    LOGGER.info(f'Order Status: {order["data"][0]["order_status"]}')
+    print(f'Order Data: {order}')
+    print(f'Order Status: {order["data"][0]["order_status"]}')
     if order["data"][0]["order_status"] == "Filled":
-        LOGGER.info(f'Placing buy limit TP/SL order')
+        print(f'Placing buy limit TP/SL order')
         tp_order = client.place_active_order(
             symbol=symbol,
             side="Buy",
@@ -109,13 +109,13 @@ def handle_order(message):
             close_on_trigger=False
         )
         tp_order = json.loads(json.dumps(tp_order, indent=4))['result']
-        LOGGER.info(f"TP/SL limit order: {tp_order}")
+        print(f"TP/SL limit order: {tp_order}")
 
 
 def handle_trade(message):
     trade_data = json.loads(json.dumps(message, indent=4))
     trade_data = trade_data["data"]
-    LOGGER.info(f'Trade Data: {trade_data}')
+    print(f'Trade Data: {trade_data}')
 
 
 # Subscribe to the execution topics
@@ -125,7 +125,7 @@ def get_connected():
     # ws.order_stream(handle_order)
     ws.execution_stream(handle_execution)
     # ws.position_stream(handle_position)
-    LOGGER.info(f'Websocket connected')
+    print(f'Websocket connected')
     while True:
         sleep(1)
 
@@ -157,7 +157,7 @@ def trades(request):
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
     if request.method == 'POST' and "buyprice" in request.POST:
         print(f"Account Balance: {account_balance}")
-        # print(f'Order Post Data: {request.POST["buyprice"]}, {request.POST["takeprofit"]}, {request.POST["stoploss"]}')
+        print(f'TradingViews Post Data: {request.POST["buyprice"]}, {request.POST["takeprofit"]}, {request.POST["stoploss"]}')
         buy_price = float(request.POST["buyprice"])
         take_profit = float(request.POST["takeprofit"])
         stop_loss = float(request.POST["stoploss"])
