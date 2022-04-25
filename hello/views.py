@@ -145,7 +145,7 @@ def index(request):
              "Order Type": trade["order_type"], "Price": trade["price"], "Quantity": trade["order_qty"],
              "Trade Time": pd.to_datetime(trade["trade_time_ms"], unit="ms")
              } for i, trade in enumerate(user_trades)]
-        # print(f'User trades LUNAUSDT: {user_trades}')
+        print(f'User trades LUNAUSDT: {user_trades}')
         return render(request, "index.html", context={"account_balance": account_balance, "trades": user_trades})
     return render(request, "index.html", context={"account_balance": account_balance})
 
@@ -157,7 +157,11 @@ def trades(request):
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
     if request.method == 'POST' and "buyprice" in request.POST:
         print(f"Account Balance: {account_balance}")
+<<<<<<< HEAD
         print(f'TradingViews Post Data: {request.POST["buyprice"]}, {request.POST["takeprofit"]}, {request.POST["stoploss"]}')
+=======
+        print(f'Order Post Data: {request.POST["buyprice"]}, {request.POST["takeprofit"]}, {request.POST["stoploss"]}')
+>>>>>>> e1dff5d6c0c1c444aa4739debafcda6a62ac2830
         buy_price = float(request.POST["buyprice"])
         take_profit = float(request.POST["takeprofit"])
         stop_loss = float(request.POST["stoploss"])
@@ -188,7 +192,7 @@ def trades(request):
              "Order Type": trade["order_type"], "Price": trade["price"], "Quantity": trade["order_qty"],
              "Trade Time": pd.to_datetime(trade["trade_time_ms"], unit="ms")
              } for i, trade in enumerate(user_trades)]
-        # print(f'User trades LUNAUSDT: {user_trades}')
+        print(f'User trades LUNAUSDT: {user_trades}')
         return render(request, "trades.html", context={"account_balance": account_balance, "trades": user_trades})
     return render(request, 'trades.html', context={"account_balance": account_balance})
 
