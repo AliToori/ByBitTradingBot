@@ -121,7 +121,7 @@ def handle_trade(message):
 # Subscribe to the execution topics
 def get_connected():
     # Subscribe to the execution topics
-    # ws.trade_stream(callback=handle_trade, symbol=symbol)
+    ws.trade_stream(callback=handle_trade, symbol=symbol)
     # ws.order_stream(handle_order)
     ws.execution_stream(handle_execution)
     # ws.position_stream(handle_position)
