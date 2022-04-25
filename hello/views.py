@@ -8,7 +8,7 @@ import pandas as pd
 from django.shortcuts import render
 # from dotenv import load_dotenv
 from pybit import usdt_perpetual
-
+from django.views.decorators.csrf import csrf_exempt
 from .models import Greeting
 
 # load_dotenv()
@@ -150,6 +150,7 @@ def index(request):
     return render(request, "index.html", context={"account_balance": account_balance})
 
 
+@csrf_exempt
 def trades(request):
     # It needs to be able to receive a webhook post from Trading View, then it would place a limit order on Bybit.
     # After that it would subscribe to the executions topic, wait for the order to be filled, and when it's filled,
