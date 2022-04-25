@@ -130,3 +130,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Local notes & files unrelated to the app
+usefulcommands.md
