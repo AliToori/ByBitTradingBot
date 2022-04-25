@@ -156,7 +156,10 @@ def trades(request):
     # After that it would subscribe to the executions topic, wait for the order to be filled, and when it's filled,
     # it would place Take Profit Limit Orders.
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+    print(f'POST DATA: {request.POST}')
     if request.method == 'POST' and "buyprice" in request.POST:
+        client.cancel_all_active_orders(symbol=symbol)
+        client.cancel_all_conditional_orders(symbol=symbol)
         print(f"Account Balance: {account_balance}")
         print(f'TradingViews Post Data: {request.POST["buyprice"]}, {request.POST["takeprofit"]}, {request.POST["stoploss"]}')
         print(f'Order Post Data: {request.POST["buyprice"]}, {request.POST["takeprofit"]}, {request.POST["stoploss"]}')
