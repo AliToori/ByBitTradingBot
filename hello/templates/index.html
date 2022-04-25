@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <div class="jumbotron">
+        <div class="container text-center">
+            <h1>ByBit Trading Bot</h1>
+            <p>ByBit USDT perpetual trading bot based on TradingView alerts</p>
+            <form action="" method="POST" role="form" style="margin: auto; width: 100%">
+                {% csrf_token %}
+                <button type="button" class="btn btn-lg btn-default"> Account Balance: <span
+                        class="glyphicon glyphicon-usd"></span>{{ account_balance }}</button>
+                <button type="submit" name="trades" class="btn btn-lg btn-primary"><span
+                        class="glyphicon glyphicon-th-list"></span> Trades
+                </button>
+            </form>
+        </div>
+        <div class="container" id="tabletrades">
+            {% if trades %}
+                <h3 class="text-center">User Trades LUNAUSDT</h3>
+                <table class="table table-hover table-dark" id="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        {% for key, value in trades.0.items %}
+                            <th class="text-dark"> {{ key }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for trade in trades %}
+                        <tr>
+                            {% for key, value in trade.items %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
