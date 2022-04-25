@@ -199,9 +199,9 @@ def trades(request):
 
 
 @csrf_exempt
-def trades(request):
+def test(request):
     print(f'REQUEST METHOD: {request.method}, REQUEST DATA: {request.POST}')
-    return render(request, "trades.html")
+    return render(request, "test.html")
 
 
 def db(request):
