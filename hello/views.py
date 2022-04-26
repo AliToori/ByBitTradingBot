@@ -6,12 +6,12 @@ from time import sleep
 
 import pandas as pd
 from django.shortcuts import render
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 from pybit import usdt_perpetual
 from django.views.decorators.csrf import csrf_exempt
 from .models import Greeting
 
-# load_dotenv()
+load_dotenv()
 
 logging.config.dictConfig({
     "version": 1,
@@ -157,10 +157,9 @@ def trades(request):
     # it would place Take Profit Limit Orders.
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
     if request.method == 'POST':
-        print(f', DATA: {request.body}, DATA TYPE: {type(request.body)}')
-        request_data = json.loads(request.body.decode(encoding="utf-8"))
-        print(f'REQUEST METHOD: {request.method}, DATA: {request_data}, DATA TYPE: {type(request_data)}')
-        if "buyprice" in request_data:
+        if "buyprice" in request.body.decode(encoding="utf-8"):
+            request_data = json.loads(request.body.decode(encoding="utf-8"))
+            print(f'REQUEST METHOD: {request.method}, DATA: {request_data}')
             client.cancel_all_active_orders(symbol=symbol)
             client.cancel_all_conditional_orders(symbol=symbol)
             print(f"Account Balance: {account_balance}")
@@ -188,6 +187,7 @@ def trades(request):
             print(f"Buy Market order has been placed: {order}")
             return render(request, 'trades.html', {"account_balance": account_balance, "order": order})
         elif "trades" in request.POST:
+            print(f'REQUEST METHOD: {request.method}, DATA: {request.POST}, DATA TYPE: {type(request.POST)}')
             user_trades = client.user_trade_records(symbol="LUNAUSDT")
             user_trades = json.loads(json.dumps(user_trades, indent=4))["result"]["data"]
             user_trades = [
