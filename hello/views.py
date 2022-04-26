@@ -187,7 +187,7 @@ def trades(request):
             print(f"Buy Market order has been placed: {order}")
             return render(request, 'trades.html', {"account_balance": account_balance, "order": order})
         elif "trades" in request.POST:
-            print(f'REQUEST METHOD: {request.method}, DATA: {request.POST}, DATA TYPE: {type(request.POST)}')
+            print(f'REQUEST METHOD: {request.method}, DATA: {request.POST}')
             user_trades = client.user_trade_records(symbol="LUNAUSDT")
             user_trades = json.loads(json.dumps(user_trades, indent=4))["result"]["data"]
             user_trades = [
