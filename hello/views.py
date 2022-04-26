@@ -199,6 +199,17 @@ def trades(request):
     return render(request, 'trades.html', context={"account_balance": account_balance})
 
 
+@csrf_exempt
+def test(request):
+    if request.method == 'POST':
+        request_data = json.loads(request.body.decode(encoding="utf-8"))
+        print(f'REQUEST METHOD: {request.method}, DATA: {request_data}, DATA TYPE: {type(request_data)}')
+        if "buyprice" in request_data:
+            print("buyprice" in request_data)
+            print(f'BuyPrice: {request_data["buyprice"]}')
+    return render(request, "test.html")
+
+
 def db(request):
     greeting = Greeting()
     greeting.save()
