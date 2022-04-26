@@ -208,6 +208,7 @@ def test(request):
     print(f'REQUEST METHOD: {request.method}, DATA: {request_data}, DATA TYPE: {type(request_data)}')
     if request.method == 'POST' and "buyprice" in request_data:
         print("buyprice" in request_data)
+    return render(request, "test.html")
 
 
 def db(request):
