@@ -157,6 +157,7 @@ def trades(request):
     # it would place Take Profit Limit Orders.
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
     if request.method == 'POST':
+        print(f', DATA: {request.body}, DATA TYPE: {type(request.body)}')
         request_data = json.loads(request.body.decode(encoding="utf-8"))
         print(f'REQUEST METHOD: {request.method}, DATA: {request_data}, DATA TYPE: {type(request_data)}')
         if "buyprice" in request_data:
