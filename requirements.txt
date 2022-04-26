@@ -4,4 +4,4 @@ django-heroku
 requests
 pybit
 colorlog
-pandas
+panda

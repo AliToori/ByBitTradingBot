@@ -152,9 +152,6 @@ def index(request):
 
 @csrf_exempt
 def trades(request):
-    # It needs to be able to receive a webhook post from Trading View, then it would place a limit order on Bybit.
-    # After that it would subscribe to the executions topic, wait for the order to be filled, and when it's filled,
-    # it would place Take Profit Limit Orders.
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
     if request.method == 'POST':
         if "buyprice" in request.body.decode(encoding="utf-8"):
