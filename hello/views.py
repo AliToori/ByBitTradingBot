@@ -6,12 +6,12 @@ from time import sleep
 
 import pandas as pd
 from django.shortcuts import render
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 from pybit import usdt_perpetual
 from django.views.decorators.csrf import csrf_exempt
 from .models import Greeting
 
-# load_dotenv()
+load_dotenv()
 
 logging.config.dictConfig({
     "version": 1,
