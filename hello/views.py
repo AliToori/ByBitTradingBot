@@ -157,7 +157,7 @@ def trades(request):
     # it would place Take Profit Limit Orders.
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
     if request.method == 'POST':
-        request_data = request.body.decode(encoding="utf-8")
+        request_data = json.loads(request.body.decode(encoding="utf-8"))
         print(f'REQUEST METHOD: {request.method}, DATA: {request_data}, DATA TYPE: {type(request_data)}')
         if "buyprice" in request_data:
             client.cancel_all_active_orders(symbol=symbol)
@@ -202,10 +202,11 @@ def trades(request):
 @csrf_exempt
 def test(request):
     if request.method == 'POST':
-        request_data = request.body.decode(encoding="utf-8")
+        request_data = json.loads(request.body.decode(encoding="utf-8"))
         print(f'REQUEST METHOD: {request.method}, DATA: {request_data}, DATA TYPE: {type(request_data)}')
         if "buyprice" in request_data:
             print("buyprice" in request_data)
+            print(f'BuyPrice: {request_data["buyprice"]}')
     return render(request, "test.html")
 
 
