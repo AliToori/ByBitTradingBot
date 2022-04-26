@@ -1,0 +1,184 @@
+[2022-04-26 01:29:15,778,128] [Websocket connected]
+[2022-04-26 01:29:41,880,241] [Internal Server Error: /]
+Traceback (most recent call last):
+  File "C:\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "E:\AliData\BotFlocks\sunshine456\hello\views.py", line 139, in index
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 506, in get_wallet_balance
+    return self._submit_request(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 187, in _submit_request
+    signature = self._auth(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 107, in _auth
+    raise PermissionError("Authenticated endpoints require keys.")
+PermissionError: Authenticated endpoints require keys.
+[2022-04-26 01:29:42,554,241] [Not Found: /favicon.ico]
+[2022-04-26 01:30:04,856,241] [Internal Server Error: /]
+Traceback (most recent call last):
+  File "C:\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "E:\AliData\BotFlocks\sunshine456\hello\views.py", line 139, in index
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 506, in get_wallet_balance
+    return self._submit_request(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 187, in _submit_request
+    signature = self._auth(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 107, in _auth
+    raise PermissionError("Authenticated endpoints require keys.")
+PermissionError: Authenticated endpoints require keys.
+[2022-04-26 01:30:06,008,241] [Internal Server Error: /]
+Traceback (most recent call last):
+  File "C:\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "E:\AliData\BotFlocks\sunshine456\hello\views.py", line 139, in index
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 506, in get_wallet_balance
+    return self._submit_request(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 187, in _submit_request
+    signature = self._auth(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 107, in _auth
+    raise PermissionError("Authenticated endpoints require keys.")
+PermissionError: Authenticated endpoints require keys.
+[2022-04-26 01:30:06,736,241] [Internal Server Error: /]
+Traceback (most recent call last):
+  File "C:\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "E:\AliData\BotFlocks\sunshine456\hello\views.py", line 139, in index
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 506, in get_wallet_balance
+    return self._submit_request(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 187, in _submit_request
+    signature = self._auth(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 107, in _auth
+    raise PermissionError("Authenticated endpoints require keys.")
+PermissionError: Authenticated endpoints require keys.
+[2022-04-26 01:30:51,067,266] [E:\AliData\BotFlocks\sunshine456\hello\views.py changed, reloading.]
+[2022-04-26 01:30:56,979,241] [Internal Server Error: /]
+Traceback (most recent call last):
+  File "C:\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "E:\AliData\BotFlocks\sunshine456\hello\views.py", line 139, in index
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 506, in get_wallet_balance
+    return self._submit_request(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 187, in _submit_request
+    signature = self._auth(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 107, in _auth
+    raise PermissionError("Authenticated endpoints require keys.")
+PermissionError: Authenticated endpoints require keys.
+[2022-04-26 01:30:57,953,241] [Internal Server Error: /]
+Traceback (most recent call last):
+  File "C:\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "E:\AliData\BotFlocks\sunshine456\hello\views.py", line 139, in index
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 506, in get_wallet_balance
+    return self._submit_request(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 187, in _submit_request
+    signature = self._auth(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 107, in _auth
+    raise PermissionError("Authenticated endpoints require keys.")
+PermissionError: Authenticated endpoints require keys.
+[2022-04-26 01:31:15,271,128] [Websocket connected]
+[2022-04-26 01:31:23,022,241] [Internal Server Error: /]
+Traceback (most recent call last):
+  File "C:\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "E:\AliData\BotFlocks\sunshine456\hello\views.py", line 139, in index
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 506, in get_wallet_balance
+    return self._submit_request(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 187, in _submit_request
+    signature = self._auth(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 107, in _auth
+    raise PermissionError("Authenticated endpoints require keys.")
+PermissionError: Authenticated endpoints require keys.
+[2022-04-26 01:31:23,791,241] [Internal Server Error: /]
+Traceback (most recent call last):
+  File "C:\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "E:\AliData\BotFlocks\sunshine456\hello\views.py", line 139, in index
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 506, in get_wallet_balance
+    return self._submit_request(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 187, in _submit_request
+    signature = self._auth(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 107, in _auth
+    raise PermissionError("Authenticated endpoints require keys.")
+PermissionError: Authenticated endpoints require keys.
+[2022-04-26 01:31:24,438,241] [Internal Server Error: /]
+Traceback (most recent call last):
+  File "C:\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "E:\AliData\BotFlocks\sunshine456\hello\views.py", line 139, in index
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 506, in get_wallet_balance
+    return self._submit_request(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 187, in _submit_request
+    signature = self._auth(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 107, in _auth
+    raise PermissionError("Authenticated endpoints require keys.")
+PermissionError: Authenticated endpoints require keys.
+[2022-04-26 01:31:25,022,241] [Internal Server Error: /]
+Traceback (most recent call last):
+  File "C:\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "E:\AliData\BotFlocks\sunshine456\hello\views.py", line 139, in index
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 506, in get_wallet_balance
+    return self._submit_request(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 187, in _submit_request
+    signature = self._auth(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 107, in _auth
+    raise PermissionError("Authenticated endpoints require keys.")
+PermissionError: Authenticated endpoints require keys.
+[2022-04-26 01:31:25,699,241] [Internal Server Error: /]
+Traceback (most recent call last):
+  File "C:\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "E:\AliData\BotFlocks\sunshine456\hello\views.py", line 139, in index
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 506, in get_wallet_balance
+    return self._submit_request(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 187, in _submit_request
+    signature = self._auth(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 107, in _auth
+    raise PermissionError("Authenticated endpoints require keys.")
+PermissionError: Authenticated endpoints require keys.
+[2022-04-26 01:31:26,453,241] [Internal Server Error: /]
+Traceback (most recent call last):
+  File "C:\Python38\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Python38\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "E:\AliData\BotFlocks\sunshine456\hello\views.py", line 139, in index
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 506, in get_wallet_balance
+    return self._submit_request(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 187, in _submit_request
+    signature = self._auth(
+  File "C:\Python38\lib\site-packages\pybit\_http_manager.py", line 107, in _auth
+    raise PermissionError("Authenticated endpoints require keys.")
+PermissionError: Authenticated endpoints require keys.
