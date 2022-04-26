@@ -3,15 +3,25 @@ import logging.config
 import os
 from threading import Thread
 from time import sleep
+<<<<<<< HEAD
 
 import pandas as pd
 from django.shortcuts import render
 from dotenv import load_dotenv
+=======
+import pandas as pd
+from django.shortcuts import render
+# from dotenv import load_dotenv
+>>>>>>> 207da4a4f92e78b26940ebdf0381124ad3702d7c
 from pybit import usdt_perpetual
 from django.views.decorators.csrf import csrf_exempt
 from .models import Greeting
 
+<<<<<<< HEAD
 load_dotenv()
+=======
+# load_dotenv()
+>>>>>>> 207da4a4f92e78b26940ebdf0381124ad3702d7c
 
 logging.config.dictConfig({
     "version": 1,
@@ -137,14 +147,22 @@ get_connected()
 def index(request):
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
     if request.method == 'POST' and "trades" in request.POST:
+<<<<<<< HEAD
         user_trades = client.user_trade_records(symbol="LUNAUSDT")
+=======
+        user_trades = client.user_trade_records(symbol="BTCUSDT")
+>>>>>>> 207da4a4f92e78b26940ebdf0381124ad3702d7c
         user_trades = json.loads(json.dumps(user_trades, indent=4))["result"]["data"]
         user_trades = [
             {"Order No": i, "Order ID": trade["order_id"], "Symbol": trade["symbol"], "Side": trade["side"],
              "Order Type": trade["order_type"], "Price": trade["price"], "Quantity": trade["order_qty"],
              "Trade Time": pd.to_datetime(trade["trade_time_ms"], unit="ms")
              } for i, trade in enumerate(user_trades)]
+<<<<<<< HEAD
         # print(f'User trades LUNAUSDT: {user_trades}')
+=======
+        # print(f'User trades BTCUSDT: {user_trades}')
+>>>>>>> 207da4a4f92e78b26940ebdf0381124ad3702d7c
         return render(request, "index.html", context={"account_balance": account_balance, "trades": user_trades})
     return render(request, "index.html", context={"account_balance": account_balance})
 
@@ -187,14 +205,22 @@ def trades(request):
             return render(request, 'trades.html', {"account_balance": account_balance, "order": order})
         elif "trades" in request.POST:
             print(f'REQUEST METHOD: {request.method}, DATA: {request.POST}')
+<<<<<<< HEAD
             user_trades = client.user_trade_records(symbol="LUNAUSDT")
+=======
+            user_trades = client.user_trade_records(symbol="BTCUSDT")
+>>>>>>> 207da4a4f92e78b26940ebdf0381124ad3702d7c
             user_trades = json.loads(json.dumps(user_trades, indent=4))["result"]["data"]
             user_trades = [
                 {"Order No": i, "Order ID": trade["order_id"], "Symbol": trade["symbol"], "Side": trade["side"],
                  "Order Type": trade["order_type"], "Price": trade["price"], "Quantity": trade["order_qty"],
                  "Trade Time": pd.to_datetime(trade["trade_time_ms"], unit="ms")
                  } for i, trade in enumerate(user_trades)]
+<<<<<<< HEAD
             # print(f'User trades LUNAUSDT: {user_trades}')
+=======
+            # print(f'User trades BTCUSDT: {user_trades}')
+>>>>>>> 207da4a4f92e78b26940ebdf0381124ad3702d7c
             return render(request, "trades.html", context={"account_balance": account_balance, "trades": user_trades})
     return render(request, 'trades.html', context={"account_balance": account_balance})
 

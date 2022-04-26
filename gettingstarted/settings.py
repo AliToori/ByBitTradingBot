@@ -24,7 +24,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "CHANGE_ME!!!! (P.S. the SECRET_KEY environment variable will be used, if set, instead)."
 
 # SECURITY WARNING: don't run with debug turned on in production!
+<<<<<<< HEAD
 DEBUG = (os.environ.get('DEBUG_VALUE') == 'True')
+=======
+DEBUG = True
+>>>>>>> 207da4a4f92e78b26940ebdf0381124ad3702d7c
 
 ALLOWED_HOSTS = []
 
