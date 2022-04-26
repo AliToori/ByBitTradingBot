@@ -156,58 +156,56 @@ def trades(request):
     # After that it would subscribe to the executions topic, wait for the order to be filled, and when it's filled,
     # it would place Take Profit Limit Orders.
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
-    request_data = request.body.decode(encoding="utf-8")
-    print(f'REQUEST METHOD: {request.method}, DATA: {request_data}')
-    if request.method == 'POST' and "buyprice" in 'request_data':
-        client.cancel_all_active_orders(symbol=symbol)
-        client.cancel_all_conditional_orders(symbol=symbol)
-        print(f"Account Balance: {account_balance}")
-        print(f'TradingViews Alert Data: {request_data}')
-        buy_price = float(request_data["buyprice"])
-        take_profit = float(request_data["takeprofit"])
-        stop_loss = float(request_data["stoploss"])
-        # quantity = round(account_balance / buy_price)
-        quantity = 1
-        order = client.place_active_order(
-            symbol=symbol,
-            side="Buy",
-            order_type="Limit",
-            qty=quantity,
-            price=buy_price,
-            time_in_force="GoodTillCancel",
-            reduce_only=False,
-            close_on_trigger=False
-        )
-        order = json.loads(json.dumps(order, indent=4))["result"]
-        order = {"order_id": order["order_id"], "symbol": order["symbol"], "side": order["side"],
-                 "order_type": order["order_type"], "price": order["price"],
-                 "qty": order["qty"], "order_status": order["order_status"], "created_time": order["created_time"]
-                 }
-        print(f"Buy Market order has been placed: {order}")
-        return render(request, 'trades.html', {"account_balance": account_balance, "order": order})
-    elif request.method == 'POST' and "trades" in request.POST:
-        user_trades = client.user_trade_records(symbol="LUNAUSDT")
-        user_trades = json.loads(json.dumps(user_trades, indent=4))["result"]["data"]
-        user_trades = [
-            {"Order No": i, "Order ID": trade["order_id"], "Symbol": trade["symbol"], "Side": trade["side"],
-             "Order Type": trade["order_type"], "Price": trade["price"], "Quantity": trade["order_qty"],
-             "Trade Time": pd.to_datetime(trade["trade_time_ms"], unit="ms")
-             } for i, trade in enumerate(user_trades)]
-        print(f'User trades LUNAUSDT: {user_trades}')
-        return render(request, "trades.html", context={"account_balance": account_balance, "trades": user_trades})
+    if request.method == 'POST':
+        request_data = request.body.decode(encoding="utf-8")
+        print(f'REQUEST METHOD: {request.method}, DATA: {request_data}, DATA TYPE: {type(request_data)}')
+        if "buyprice" in request_data:
+            client.cancel_all_active_orders(symbol=symbol)
+            client.cancel_all_conditional_orders(symbol=symbol)
+            print(f"Account Balance: {account_balance}")
+            print(f'TradingViews Alert Data: {request_data}')
+            buy_price = float(request_data["buyprice"])
+            take_profit = float(request_data["takeprofit"])
+            stop_loss = float(request_data["stoploss"])
+            # quantity = round(account_balance / buy_price)
+            quantity = 1
+            order = client.place_active_order(
+                symbol=symbol,
+                side="Buy",
+                order_type="Limit",
+                qty=quantity,
+                price=buy_price,
+                time_in_force="GoodTillCancel",
+                reduce_only=False,
+                close_on_trigger=False
+            )
+            order = json.loads(json.dumps(order, indent=4))["result"]
+            order = {"order_id": order["order_id"], "symbol": order["symbol"], "side": order["side"],
+                     "order_type": order["order_type"], "price": order["price"],
+                     "qty": order["qty"], "order_status": order["order_status"], "created_time": order["created_time"]
+                     }
+            print(f"Buy Market order has been placed: {order}")
+            return render(request, 'trades.html', {"account_balance": account_balance, "order": order})
+        elif "trades" in request.POST:
+            user_trades = client.user_trade_records(symbol="LUNAUSDT")
+            user_trades = json.loads(json.dumps(user_trades, indent=4))["result"]["data"]
+            user_trades = [
+                {"Order No": i, "Order ID": trade["order_id"], "Symbol": trade["symbol"], "Side": trade["side"],
+                 "Order Type": trade["order_type"], "Price": trade["price"], "Quantity": trade["order_qty"],
+                 "Trade Time": pd.to_datetime(trade["trade_time_ms"], unit="ms")
+                 } for i, trade in enumerate(user_trades)]
+            print(f'User trades LUNAUSDT: {user_trades}')
+            return render(request, "trades.html", context={"account_balance": account_balance, "trades": user_trades})
     return render(request, 'trades.html', context={"account_balance": account_balance})
 
 
 @csrf_exempt
 def test(request):
-    # It needs to be able to receive a webhook post from Trading View, then it would place a limit order on Bybit.
-    # After that it would subscribe to the executions topic, wait for the order to be filled, and when it's filled,
-    # it would place Take Profit Limit Orders.
-    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
-    request_data = request.body.decode(encoding="utf-8")
-    print(f'REQUEST METHOD: {request.method}, DATA: {request_data}, DATA TYPE: {type(request_data)}')
-    if request.method == 'POST' and "buyprice" in request_data:
-        print("buyprice" in request_data)
+    if request.method == 'POST':
+        request_data = request.body.decode(encoding="utf-8")
+        print(f'REQUEST METHOD: {request.method}, DATA: {request_data}, DATA TYPE: {type(request_data)}')
+        if "buyprice" in request_data:
+            print("buyprice" in request_data)
     return render(request, "test.html")
 
 
