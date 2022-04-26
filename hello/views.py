@@ -3,7 +3,6 @@ import logging.config
 import os
 from threading import Thread
 from time import sleep
-
 import pandas as pd
 from django.shortcuts import render
 # from dotenv import load_dotenv
@@ -58,7 +57,7 @@ api_key = os.getenv("BYBIT_API_KEY")
 api_secret = os.getenv("BYBIT_API_SECRET")
 symbol = os.getenv("SYMBOL")
 client = usdt_perpetual.HTTP(endpoint='https://api-testnet.bybit.com', api_key=api_key, api_secret=api_secret)
-ws = usdt_perpetual.WebSocket(test=False, api_key=api_key, api_secret=api_secret)
+ws = usdt_perpetual.WebSocket(test=True, api_key=api_key, api_secret=api_secret)
 
 buy_price = 93.40
 quantity = 1
@@ -76,9 +75,9 @@ def handle_execution(message):
         tp_order = client.place_active_order(
             symbol=symbol,
             side="Buy",
-            order_type="Market",
+            order_type="Limit",
             qty=quantity,
-            # price=buy_price,
+            price=buy_price,
             take_profit=take_profit,
             stop_loss=stop_loss,
             time_in_force="GoodTillCancel",
@@ -99,7 +98,7 @@ def handle_order(message):
         tp_order = client.place_active_order(
             symbol=symbol,
             side="Buy",
-            order_type="Market",
+            order_type="Limit",
             qty=quantity,
             price=buy_price,
             take_profit=take_profit,
@@ -126,32 +125,34 @@ def get_connected():
     ws.execution_stream(handle_execution)
     # ws.position_stream(handle_position)
     print(f'Websocket connected')
-    while True:
-        sleep(1)
 
 
 # Start WebSocket in a separate thread
-Thread(target=get_connected).start()
+# Thread(target=get_connected).start()
+get_connected()
 
 
 # Create your views here.
 def index(request):
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
     if request.method == 'POST' and "trades" in request.POST:
-        user_trades = client.user_trade_records(symbol="LUNAUSDT")
+        user_trades = client.user_trade_records(symbol="BTCUSDT")
         user_trades = json.loads(json.dumps(user_trades, indent=4))["result"]["data"]
         user_trades = [
             {"Order No": i, "Order ID": trade["order_id"], "Symbol": trade["symbol"], "Side": trade["side"],
              "Order Type": trade["order_type"], "Price": trade["price"], "Quantity": trade["order_qty"],
              "Trade Time": pd.to_datetime(trade["trade_time_ms"], unit="ms")
              } for i, trade in enumerate(user_trades)]
-        print(f'User trades LUNAUSDT: {user_trades}')
+        # print(f'User trades BTCUSDT: {user_trades}')
         return render(request, "index.html", context={"account_balance": account_balance, "trades": user_trades})
     return render(request, "index.html", context={"account_balance": account_balance})
 
 
 @csrf_exempt
 def trades(request):
+    # It needs to be able to receive a webhook post from Trading View, then it would place a limit order on Bybit.
+    # After that it would subscribe to the executions topic, wait for the order to be filled, and when it's filled,
+    # it would place Take Profit Limit Orders.
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
     if request.method == 'POST':
         if "buyprice" in request.body.decode(encoding="utf-8"):
@@ -185,14 +186,14 @@ def trades(request):
             return render(request, 'trades.html', {"account_balance": account_balance, "order": order})
         elif "trades" in request.POST:
             print(f'REQUEST METHOD: {request.method}, DATA: {request.POST}')
-            user_trades = client.user_trade_records(symbol="LUNAUSDT")
+            user_trades = client.user_trade_records(symbol="BTCUSDT")
             user_trades = json.loads(json.dumps(user_trades, indent=4))["result"]["data"]
             user_trades = [
                 {"Order No": i, "Order ID": trade["order_id"], "Symbol": trade["symbol"], "Side": trade["side"],
                  "Order Type": trade["order_type"], "Price": trade["price"], "Quantity": trade["order_qty"],
                  "Trade Time": pd.to_datetime(trade["trade_time_ms"], unit="ms")
                  } for i, trade in enumerate(user_trades)]
-            print(f'User trades LUNAUSDT: {user_trades}')
+            # print(f'User trades BTCUSDT: {user_trades}')
             return render(request, "trades.html", context={"account_balance": account_balance, "trades": user_trades})
     return render(request, 'trades.html', context={"account_balance": account_balance})
 
