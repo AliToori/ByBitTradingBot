@@ -156,16 +156,16 @@ def trades(request):
     # After that it would subscribe to the executions topic, wait for the order to be filled, and when it's filled,
     # it would place Take Profit Limit Orders.
     account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
-    print(f'POST DATA: {request.body}')
-    if request.method == 'POST' and "buyprice" in request.POST:
+    request_data = request.body.decode(encoding="utf-8")
+    print(f'REQUEST METHOD: {request.method}, DATA: {request_data}')
+    if request.method == 'POST' and "buyprice" in 'request_data':
         client.cancel_all_active_orders(symbol=symbol)
         client.cancel_all_conditional_orders(symbol=symbol)
         print(f"Account Balance: {account_balance}")
-        print(f'TradingViews Post Data: {request.POST["buyprice"]}, {request.POST["takeprofit"]}, {request.POST["stoploss"]}')
-        print(f'Order Post Data: {request.POST["buyprice"]}, {request.POST["takeprofit"]}, {request.POST["stoploss"]}')
-        buy_price = float(request.POST["buyprice"])
-        take_profit = float(request.POST["takeprofit"])
-        stop_loss = float(request.POST["stoploss"])
+        print(f'TradingViews Alert Data: {request_data}')
+        buy_price = float(request_data["buyprice"])
+        take_profit = float(request_data["takeprofit"])
+        stop_loss = float(request_data["stoploss"])
         # quantity = round(account_balance / buy_price)
         quantity = 1
         order = client.place_active_order(
@@ -200,8 +200,14 @@ def trades(request):
 
 @csrf_exempt
 def test(request):
-    print(f'REQUEST METHOD: {request.method}, REQUEST DATA: {request.body}')
-    return render(request, "test.html")
+    # It needs to be able to receive a webhook post from Trading View, then it would place a limit order on Bybit.
+    # After that it would subscribe to the executions topic, wait for the order to be filled, and when it's filled,
+    # it would place Take Profit Limit Orders.
+    account_balance = client.get_wallet_balance(coin='USDT')["result"]["USDT"]["wallet_balance"]
+    request_data = request.body.decode(encoding="utf-8")
+    print(f'REQUEST METHOD: {request.method}, DATA: {request_data}, DATA TYPE: {type(request_data)}')
+    if request.method == 'POST' and "buyprice" in request_data:
+        print("buyprice" in request_data)
 
 
 def db(request):
