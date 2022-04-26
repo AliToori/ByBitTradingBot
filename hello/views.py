@@ -194,7 +194,7 @@ def trades(request):
                  "Order Type": trade["order_type"], "Price": trade["price"], "Quantity": trade["order_qty"],
                  "Trade Time": pd.to_datetime(trade["trade_time_ms"], unit="ms")
                  } for i, trade in enumerate(user_trades)]
-            print(f'User trades LUNAUSDT: {user_trades}')
+            # print(f'User trades LUNAUSDT: {user_trades}')
             return render(request, "trades.html", context={"account_balance": account_balance, "trades": user_trades})
     return render(request, 'trades.html', context={"account_balance": account_balance})
 
