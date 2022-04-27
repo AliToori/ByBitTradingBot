@@ -1,6 +1,6 @@
-# Python: Getting Started
+# ByBit Trading Bot
 
-A barebones Django app, which can easily be deployed to Heroku.
+ByBit Trading Bot with Python Django Deployed to Heroku with TradingView alerts.
 
 This application supports the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out for instructions on how to deploy this app to Heroku and also run it locally.
 
